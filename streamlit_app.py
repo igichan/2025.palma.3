@@ -119,7 +119,7 @@ if user_name:
     st.write("")
 
     # 시간표 출력
-    st.write(f"### 🏫 {class_number}반 {user_name}의 시간표")
+    st.write(f"timetable")
     st.dataframe(df, use_container_width=True)
 
 st.write("")

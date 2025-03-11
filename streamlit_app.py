@@ -57,7 +57,7 @@ timetable_template = {
     "금": ["H", "B", "C", "음악", "G", "영2", "공강"]}
 }
 
- 클릭 상태 관리
+# 클릭 상태 관리
 if st.button("과목 입력 시작"):
     st.session_state["input_active"] = True  # 입력 활성화 플래그 설정
 

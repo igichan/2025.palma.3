@@ -58,7 +58,7 @@ timetable_template = {
 }
 
 # Streamlit UI 생성
-st.title("팔마 3학년 시간표 생성")
+st.title("📅 팔마 3학년 시간표 생성")
 
 # 반 선택
 class_number = st.selectbox("반을 선택하세요", list(timetable_template.keys()))
@@ -71,7 +71,7 @@ if user_name:
     subject_mapping = {}
     classroom_mapping = {}
 
-    st.write(f" {class_number} 반에 해당되는 수업: {', '.join(class_alphabets[class_number])}")
+    st.write(f"🔹 {class_number} 반에 해당되는 수업: {', '.join(class_alphabets[class_number])}")
     for alpha in class_alphabets[class_number]:
         col1, col2 = st.columns(2)
         with col1:
@@ -88,7 +88,7 @@ if user_name:
                 sub_name = subject_map.get(sub, sub)  # 과목 이름 변환
                 class_room = class_map.get(sub, "")  # 교실 정보 추가
                 if class_room:
-                    converted_subjects.append(f"{sub_name}<br><small>{class_room}</small>")  # HTML 태그 활용
+                    converted_subjects.append(f"{sub_name} ({class_room})")  # 부드러운 텍스트 형태
                 else:
                     converted_subjects.append(sub_name)
             converted_timetable[day] = converted_subjects
@@ -97,30 +97,17 @@ if user_name:
     # 변환된 시간표
     final_timetable = convert_timetable(timetable_template[class_number], subject_mapping, classroom_mapping)
 
-    # HTML 시간표 생성 함수
-    def generate_timetable_html(timetable):
-        days = ["월", "화", "수", "목", "금"]
-        periods = ["1교시", "2교시", "3교시", "4교시", "5교시", "6교시", "7교시"]
-
-        html = "<table style='border-collapse: collapse; width: 100%; text-align: center; border: 1px solid black;'>"
-        html += "<tr style='background-color: #f2f2f2;'><th>교시</th>" + "".join(f"<th>{day}</th>" for day in days) + "</tr>"
-
-        for i, period in enumerate(periods):
-            html += f"<tr><td style='border: 1px solid black; padding: 8px;'>{period}</td>"
-            for day in days:
-                subjects = timetable.get(day, [])
-                if len(subjects) < 7:  # 부족한 데이터 채우기
-                    subjects += [""] * (7 - len(subjects))
-                subject = subjects[i]
-                html += f"<td style='border: 1px solid black; padding: 8px;'>{subject}</td>"
-            html += "</tr>"
-
-        html += "</table>"
-        return html
+    # DataFrame 변환
+    df = pd.DataFrame.from_dict(final_timetable, orient='index', columns=["1교시", "2교시", "3교시", "4교시", "5교시", "6교시", "7교시"])
+    df = df.transpose()
 
     # 시간표 출력
-    st.write(f"### 📖 {class_number}반 {user_name}의 시간표")
-    st.markdown(generate_timetable_html(final_timetable), unsafe_allow_html=True)
+    st.write(f"### 🏫 {class_number}반 {user_name}의 시간표")
+    st.dataframe(df, use_container_width=True)
 
+st.write("")
+st.write("")
+st.write("")
+st.write("@liobadoil")
 st.write("")
 st.write("Beta Test")

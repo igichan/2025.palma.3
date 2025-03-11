@@ -77,7 +77,7 @@ if user_name:
         with col1:
             subject_mapping[alpha] = st.text_input(f"{alpha} 과목명: ", key=f"sub_{alpha}")
         with col2:
-            classroom_mapping[alpha] = st.text_input(f"{alpha} 교실 번호: ", key=f"class_{alpha}")
+            classroom_mapping[alpha] = st.text_input(f"{alpha} 교실: (ex.3-6 or 6", key=f"class_{alpha}")
 
     # 시간표 변환 함수 (과목 + 교실 표시)
     def convert_timetable(timetable, subject_map, class_map):

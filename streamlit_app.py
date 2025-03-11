@@ -57,50 +57,43 @@ timetable_template = {
     "금": ["H", "B", "C", "음악", "G", "영2", "공강"]}
 }
 
-# 클릭 상태 관리
+# Streamlit UI 생성
+st.title("팔마 3학년 시간표")
+
+# 반 선택
+class_number = st.selectbox("반을 선택하세요", list(timetable_template.keys()))
+
+# 시작 준비
 if st.button("과목 입력 시작"):
     st.session_state["input_active"] = True  # 입력 활성화 플래그 설정
 
-# 과목 및 교실 정보 입력
-if st.session_state.get("input_active", False):  # 버튼을 눌렀을 때만 입력창 표시
+if st.button:
+    # 과목 및 교실 정보 입력
     subject_mapping = {}
     classroom_mapping = {}
 
-    st.write(f"🔹 {class_number} 반에 해당되는 수업: {', '.join(class_alphabets[class_number])}")
+    st.write(f"{class_number} 반에 해당되는 수업: {', '.join(class_alphabets[class_number])}")
     for alpha in class_alphabets[class_number]:
         col1, col2 = st.columns(2)
         with col1:
             subject_mapping[alpha] = st.text_input(f"{alpha} 과목명: ", key=f"sub_{alpha}")
         with col2:
-            classroom_mapping[alpha] = st.text_input(f"{alpha} 교실 번호: ", key=f"class_{alpha}")
+            classroom_mapping[alpha] = st.text_input(f"{alpha} 교실: (ex.3-6 or 6)", key=f"class_{alpha}")
 
-    # 시간표 생성 버튼 추가
-    if st.button("시간표 생성"):
-        # 시간표 변환 함수 (과목 + 교실 표시)
-        def convert_timetable(timetable, subject_map, class_map):
-            converted_timetable = {}
-            for day, subjects in timetable.items():
-                converted_subjects = []
-                for sub in subjects:
-                    sub_name = subject_map.get(sub, sub)  # 과목 이름 변환
-                    class_room = class_map.get(sub, "")  # 교실 정보 추가
-                    if class_room:
-                        converted_subjects.append(f"{sub_name} ({class_room})")  # 부드러운 텍스트 형태
-                    else:
-                        converted_subjects.append(sub_name)
-                converted_timetable[day] = converted_subjects
-            return converted_timetable
-
-        # 변환된 시간표
-        final_timetable = convert_timetable(timetable_template[class_number], subject_mapping, classroom_mapping)
-
-        # DataFrame 변환
-        df = pd.DataFrame.from_dict(final_timetable, orient='index', columns=["1교시", "2교시", "3교시", "4교시", "5교시", "6교시", "7교시"])
-        df = df.transpose()
-
-        # 시간표 출력
-        st.write(f"### 🏫 {class_number}반 {user_name}의 시간표")
-        st.dataframe(df, use_container_width=True)
+    # 시간표 변환 함수 (과목 + 교실 표시)
+    def convert_timetable(timetable, subject_map, class_map):
+        converted_timetable = {}
+        for day, subjects in timetable.items():
+            converted_subjects = []
+            for sub in subjects:
+                sub_name = subject_map.get(sub, sub)  # 과목 이름 변환
+                class_room = class_map.get(sub, "")  # 교실 정보 추가
+                if class_room:
+                    converted_subjects.append(f"{sub_name} ({class_room})")  # 부드러운 텍스트 형태
+                else:
+                    converted_subjects.append(sub_name)
+            converted_timetable[day] = converted_subjects
+        return converted_timetable
 
     # 변환된 시간표
     final_timetable = convert_timetable(timetable_template[class_number], subject_mapping, classroom_mapping)

@@ -58,7 +58,7 @@ timetable_template = {
 }
 
 # Streamlit UI 생성
-st.title("팔마 3학년 시간표 생성")
+st.title("팔마 3학년 시간표")
 
 # 반 선택
 class_number = st.selectbox("반을 선택하세요", list(timetable_template.keys()))

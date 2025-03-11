@@ -66,7 +66,7 @@ class_number = st.selectbox("반을 선택하세요", list(timetable_template.ke
 # 시작 준비
 st.button("시작")
 
-if st.button:
+if press st.button:
     # 과목 및 교실 정보 입력
     subject_mapping = {}
     classroom_mapping = {}

@@ -101,6 +101,13 @@ if user_name:
     df = pd.DataFrame.from_dict(final_timetable, orient='index', columns=["1교시", "2교시", "3교시", "4교시", "5교시", "6교시", "7교시"])
     df = df.transpose()
 
+    st.write("")
+    st.write("")
+    st.write("")
+    st.write("")
+    st.write("")
+    st.write("")
+
     # 시간표 출력
     st.write(f"### 🏫 {class_number}반 {user_name}의 시간표")
     st.dataframe(df, use_container_width=True)

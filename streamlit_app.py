@@ -103,7 +103,7 @@ if user_name:
 
     st.write("")
     st.write("")
-    st.write("")
+    st.write("라이트&다크 모드 변경은 오른쪽 상단 점 세개 버튼 클릭 후 settings 에서 변경 가능합니다.")
     st.write("")
     st.write("")
     st.write("")
@@ -115,6 +115,10 @@ if user_name:
     st.write(f"### 🏫 {class_number}반 {user_name}의 시간표")
     st.dataframe(df, use_container_width=True)
 
+st.write("")
+st.write("")
+st.write("")
+st.write("")
 st.write("")
 st.write("")
 st.write("")

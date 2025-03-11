@@ -37,53 +37,60 @@ class_number = st.selectbox("반을 선택하세요", list(timetable_template.ke
 user_name = st.text_input("이름을 입력하세요")
 
 if user_name:
-    # 과목 입력
+    # 과목 및 교실 정보 입력
     subject_mapping = {}
     classroom_mapping = {}
 
-    st.write(f"{class_number} 반에 해당되는 수업: {', '.join(class_alphabets[class_number])}")
-    
+    st.write(f"🔹 {class_number} 반에 해당되는 수업: {', '.join(class_alphabets[class_number])}")
     for alpha in class_alphabets[class_number]:
-        subject_mapping[alpha] = st.text_input(f"{user_name} 님의 {alpha} 과목:", key=f"subject_{alpha}")
-        classroom_mapping[alpha] = st.text_input(f"{user_name} 님의 {alpha} 과목 교실:", key=f"classroom_{alpha}")
+        col1, col2 = st.columns(2)
+        with col1:
+            subject_mapping[alpha] = st.text_input(f"{alpha} 과목명: ", key=f"sub_{alpha}")
+        with col2:
+            classroom_mapping[alpha] = st.text_input(f"{alpha} 교실 번호: ", key=f"class_{alpha}")
 
-    # 시간표를 과목명 + 교실 정보로 변환
-    def convert_timetable_with_classroom(timetable, subject_map, classroom_map):
-        return {
-            day: [
-                f"{subject_map.get(sub, sub)}<br><small>{classroom_map.get(sub, '교실 미정')}</small>"
-                if sub in subject_map else sub
-                for sub in subjects
-            ]
-            for day, subjects in timetable.items()
-        }
+    # 시간표 변환 함수 (과목 + 교실 표시)
+    def convert_timetable(timetable, subject_map, class_map):
+        converted_timetable = {}
+        for day, subjects in timetable.items():
+            converted_subjects = []
+            for sub in subjects:
+                sub_name = subject_map.get(sub, sub)  # 과목 이름 변환
+                class_room = class_map.get(sub, "")  # 교실 정보 추가
+                if class_room:
+                    converted_subjects.append(f"{sub_name}<br><small>{class_room}</small>")  # HTML 태그 활용
+                else:
+                    converted_subjects.append(sub_name)
+            converted_timetable[day] = converted_subjects
+        return converted_timetable
 
-    # 시간표 HTML 테이블 생성
+    # 변환된 시간표
+    final_timetable = convert_timetable(timetable_template[class_number], subject_mapping, classroom_mapping)
+
+    # HTML 시간표 생성 함수
     def generate_timetable_html(timetable):
         days = ["월", "화", "수", "목", "금"]
         periods = ["1교시", "2교시", "3교시", "4교시", "5교시", "6교시", "7교시"]
 
-        html = "<table style='border-collapse: collapse; width: 100%; text-align: center;'>"
-        html += "<tr><th>교시</th>" + "".join(f"<th>{day}</th>" for day in days) + "</tr>"
+        html = "<table style='border-collapse: collapse; width: 100%; text-align: center; border: 1px solid black;'>"
+        html += "<tr style='background-color: #f2f2f2;'><th>교시</th>" + "".join(f"<th>{day}</th>" for day in days) + "</tr>"
 
         for i, period in enumerate(periods):
-            html += f"<tr><td>{period}</td>"
+            html += f"<tr><td style='border: 1px solid black; padding: 8px;'>{period}</td>"
             for day in days:
-                subject = timetable.get(day, [""] * 7)[i]  # 해당 요일의 i번째 과목 가져오기
-                html += f"<td style='border: 1px solid black; padding: 5px;'>{subject}</td>"
+                subjects = timetable.get(day, [])
+                if len(subjects) < 7:  # 부족한 데이터 채우기
+                    subjects += [""] * (7 - len(subjects))
+                subject = subjects[i]
+                html += f"<td style='border: 1px solid black; padding: 8px;'>{subject}</td>"
             html += "</tr>"
 
         html += "</table>"
         return html
 
-    # 변환된 시간표 적용
-    final_timetable = convert_timetable_with_classroom(timetable_template[class_number], subject_mapping, classroom_mapping)
-
-    # HTML로 변환하여 출력
-    st.write(f"### 🏫 {class_number}반 {user_name}의 시간표")
+    # 시간표 출력
+    st.write(f"### 📖 {class_number}반 {user_name}의 시간표")
     st.markdown(generate_timetable_html(final_timetable), unsafe_allow_html=True)
 
 st.write("")
-st.write("")
 st.write("Beta Test")
-st.write("@liobadoil")

@@ -64,9 +64,9 @@ st.title("팔마 3학년 시간표")
 class_number = st.selectbox("반을 선택하세요", list(timetable_template.keys()))
 
 # 시작 준비
-st.clickbox("시작")
+st.button("시작")
 
-if clickbox:
+if button:
     # 과목 및 교실 정보 입력
     subject_mapping = {}
     classroom_mapping = {}

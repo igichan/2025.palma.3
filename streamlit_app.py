@@ -58,7 +58,7 @@ timetable_template = {
 }
 
 # Streamlit UI 생성
-st.title("📅 팔마 3학년 시간표 생성")
+st.title("팔마 3학년 시간표 생성")
 
 # 반 선택
 class_number = st.selectbox("반을 선택하세요", list(timetable_template.keys()))
@@ -71,7 +71,7 @@ if user_name:
     subject_mapping = {}
     classroom_mapping = {}
 
-    st.write(f"🔹 {class_number} 반에 해당되는 수업: {', '.join(class_alphabets[class_number])}")
+    st.write(f"{class_number} 반에 해당되는 수업: {', '.join(class_alphabets[class_number])}")
     for alpha in class_alphabets[class_number]:
         col1, col2 = st.columns(2)
         with col1:

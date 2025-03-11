@@ -63,9 +63,6 @@ st.title("팔마 3학년 시간표")
 # 반 선택
 class_number = st.selectbox("반을 선택하세요", list(timetable_template.keys()))
 
-# 사용자 이름 입력
-user_name = st.text_input("이름을 입력하세요")
-
 if user_name:
     # 과목 및 교실 정보 입력
     subject_mapping = {}
